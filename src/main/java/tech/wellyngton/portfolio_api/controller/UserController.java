@@ -20,16 +20,19 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder encoder;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto) {
         var token = new UsernamePasswordAuthenticationToken(dto.user(), dto.password());
-        authenticationManager.authenticate(token);
-        return ResponseEntity.ok().build();
+        var authentication = authenticationManager.authenticate(token);
+        return ResponseEntity.ok(tokenService.getToken((UserEntity) authentication.getPrincipal()));
     }
 
     @PostMapping("/registration")
