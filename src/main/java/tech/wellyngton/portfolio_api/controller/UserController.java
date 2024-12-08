@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tech.wellyngton.portfolio_api.domain.user.AuthenticationDTO;
 import tech.wellyngton.portfolio_api.domain.user.UserEntity;
 import tech.wellyngton.portfolio_api.domain.user.UserRepository;
+import tech.wellyngton.portfolio_api.infra.security.TokenService;
 
 @RestController
 public class UserController {
