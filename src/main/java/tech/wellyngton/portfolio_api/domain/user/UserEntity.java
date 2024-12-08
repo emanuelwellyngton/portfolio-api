@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,12 @@ public class UserEntity implements UserDetails {
     private String login;
     @Setter
     private String password;
+    @Setter
+    private String firstName;
+    @Setter
+    private String lastName;
+    private String confirmed;
+    private Date signUpAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

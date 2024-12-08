@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import tech.wellyngton.portfolio_api.domain.user.AuthenticationDTO;
+import tech.wellyngton.portfolio_api.domain.user.UserDTO;
 import tech.wellyngton.portfolio_api.domain.user.UserEntity;
 import tech.wellyngton.portfolio_api.domain.user.UserRepository;
 import tech.wellyngton.portfolio_api.infra.security.TokenService;
@@ -37,11 +38,13 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity registration(@RequestBody @Valid AuthenticationDTO dto) {
+    public ResponseEntity registration(@RequestBody @Valid UserDTO dto) {
         UserEntity newUser = new UserEntity();
-        newUser.setLogin(dto.user());
+        newUser.setLogin(dto.login());
         newUser.setPassword(encoder.encode(dto.password()));
-        repository.save(newUser);
+        newUser.setFirstName(dto.fristName());
+        newUser.setLastName(dto.lastName());
+        userRepository.save(newUser);
         return ResponseEntity.ok().build();
     }
 }
