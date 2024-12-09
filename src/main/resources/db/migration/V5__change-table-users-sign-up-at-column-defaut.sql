@@ -1,0 +1,1 @@
+ALTER TABLE users CHANGE sign_up_at sign_up_at DATETIME DEFAULT NOW();
