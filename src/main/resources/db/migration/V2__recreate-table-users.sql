@@ -15,7 +15,7 @@ CREATE TABLE users (
 CREATE TABLE `users-verification-code` (
     code VARCHAR(255) UNIQUE NOT NULL,
     user VARCHAR(255) NOT NULL,
-    expiresAt DATETIME DEFAULT DATE_ADD(NOW(), INTERVAL 2 HOUR),
+    expiresAt DATETIME NOT NULL,
     valid BIT(1) DEFAULT 1,
     PRIMARY KEY(code)
 )
