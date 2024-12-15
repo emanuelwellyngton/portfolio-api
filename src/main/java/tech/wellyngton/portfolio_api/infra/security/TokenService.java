@@ -2,6 +2,7 @@ package tech.wellyngton.portfolio_api.infra.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tech.wellyngton.portfolio_api.domain.user.UserEntity;
 
@@ -11,8 +12,11 @@ import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
+    @Value("${api.security.secret_key}")
+    private String secretKey;
+
     public String getToken(UserEntity user) {
-        Algorithm algorithm = Algorithm.HMAC256("12345678");
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
                 .withIssuer("Portfolio API")
                 .withSubject(user.getLogin())
