@@ -3,6 +3,7 @@ package tech.wellyngton.portfolio_api.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import tech.wellyngton.portfolio_api.domain.user.*;
-import tech.wellyngton.portfolio_api.domain.verification_code.VerificationCodeEntity;
 import tech.wellyngton.portfolio_api.domain.verification_code.VerificationCodeService;
 import tech.wellyngton.portfolio_api.infra.security.TokenDTO;
 import tech.wellyngton.portfolio_api.infra.security.TokenService;
@@ -31,6 +31,7 @@ public class UserController {
     private VerificationCodeService verificationCodeService;
 
     @PostMapping("/login")
+    @PreAuthorize("@userService.isUserConfirmed(#dto.user())")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto) {
         var token = new UsernamePasswordAuthenticationToken(dto.user(), dto.password());
         var authentication = authenticationManager.authenticate(token);
