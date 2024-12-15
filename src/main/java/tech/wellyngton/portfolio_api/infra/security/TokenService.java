@@ -24,6 +24,15 @@ public class TokenService {
                 .sign(algorithm);
     }
 
+    public String getSubject(String jwtToken) {
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        return JWT.require(algorithm)
+                .withIssuer("Portfolio API")
+                .build()
+                .verify(jwtToken)
+                .getSubject();
+    }
+
     public Instant getExpirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
