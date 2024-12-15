@@ -38,13 +38,11 @@ public class UserController {
     }
 
     @PostMapping("/registration")
+    @Transactional
+    @PreAuthorize("@userService.isEmailAlreadyRegistered(#dto.login())")
     public ResponseEntity registration(@RequestBody @Valid UserDTO dto) {
-        UserEntity newUser = new UserEntity();
-        newUser.setLogin(dto.login());
-        newUser.setPassword(encoder.encode(dto.password()));
-        newUser.setFirstName(dto.fristName());
-        newUser.setLastName(dto.lastName());
-        userRepository.save(newUser);
-        return ResponseEntity.ok().build();
+        UserEntity user = userService.registerUser(dto);
+        verificationCodeService.codeRegister(user);
+        return ResponseEntity.noContent().build();
     }
 }
