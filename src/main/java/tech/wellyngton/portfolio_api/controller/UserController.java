@@ -9,10 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import tech.wellyngton.portfolio_api.domain.user.AuthenticationDTO;
-import tech.wellyngton.portfolio_api.domain.user.UserDTO;
-import tech.wellyngton.portfolio_api.domain.user.UserEntity;
-import tech.wellyngton.portfolio_api.domain.user.UserRepository;
+import tech.wellyngton.portfolio_api.domain.user.*;
+import tech.wellyngton.portfolio_api.domain.verification_code.VerificationCodeEntity;
+import tech.wellyngton.portfolio_api.domain.verification_code.VerificationCodeService;
+import tech.wellyngton.portfolio_api.infra.security.TokenDTO;
 import tech.wellyngton.portfolio_api.infra.security.TokenService;
 
 @RestController
@@ -22,13 +22,13 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private VerificationCodeService verificationCodeService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto) {
