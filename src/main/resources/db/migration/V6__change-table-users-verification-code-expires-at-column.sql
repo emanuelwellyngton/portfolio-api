@@ -1,0 +1,1 @@
+ALTER TABLE `users-verification-code` CHANGE expiresAt expires_at DATETIME;
