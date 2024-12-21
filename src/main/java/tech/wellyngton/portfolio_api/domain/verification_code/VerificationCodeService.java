@@ -1,8 +1,11 @@
 package tech.wellyngton.portfolio_api.domain.verification_code;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.wellyngton.portfolio_api.domain.user.UserEntity;
+import tech.wellyngton.portfolio_api.infra.exception.ExpiredCodeException;
+import tech.wellyngton.portfolio_api.infra.exception.InvalidCodeException;
 
 import java.time.LocalDateTime;
 
@@ -18,17 +21,24 @@ public class VerificationCodeService {
     }
 
     public VerificationCodeEntity getCode(String code) {
-        return repository.findByCode(code);
+        var entity = repository.findByCode(code);
+        if(entity == null) {
+            throw new EntityNotFoundException();
+        } else {
+            return entity;
+        }
     }
 
-    public boolean isCodeValid(String code){
-        try {
-            var codeEntity = getCode(code);
-            var notExpired = codeEntity.getExpiresAt().isAfter(LocalDateTime.now());
-            var valid = codeEntity.isValid();
-            return notExpired & valid;
-        } catch (NullPointerException ex) {
-            return false;
+    public boolean isCodeValid(String code) throws InvalidCodeException, ExpiredCodeException {
+        var codeEntity = getCode(code);
+        var expired = codeEntity.getExpiresAt().isBefore(LocalDateTime.now());
+
+        if (!codeEntity.isValid()) {
+            throw new InvalidCodeException();
+        } else if (expired) {
+            throw new ExpiredCodeException();
         }
+
+        return true;
     }
 }
