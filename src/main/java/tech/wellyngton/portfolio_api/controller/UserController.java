@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tech.wellyngton.portfolio_api.domain.email_sender.EmailService;
 import tech.wellyngton.portfolio_api.domain.user.*;
 import tech.wellyngton.portfolio_api.domain.verification_code.VerificationCodeService;
 import tech.wellyngton.portfolio_api.infra.security.TokenDTO;
@@ -30,6 +31,9 @@ public class UserController {
     @Autowired
     private VerificationCodeService verificationCodeService;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping("/login")
     @PreAuthorize("@userService.isUserConfirmed(#dto.user())")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto) {
@@ -41,7 +45,7 @@ public class UserController {
 
     @PostMapping("/registration")
     @Transactional
-    @PreAuthorize("@userService.isEmailAlreadyRegistered(#dto.login())")
+    @PreAuthorize("@userService.isEmailNotRegistered(#dto.login())")
     public ResponseEntity registration(@RequestBody @Valid UserDTO dto) {
         UserEntity user = userService.registerUser(dto);
         verificationCodeService.codeRegister(user);
