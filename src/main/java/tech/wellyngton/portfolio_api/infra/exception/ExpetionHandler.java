@@ -32,4 +32,19 @@ public class ExpetionHandler {
         return ResponseEntity.badRequest().body("duplicated_entity");
     }
 
+    @ExceptionHandler(EmailAlreadyRegisteredException.class)
+    public ResponseEntity emailAlreadyRegistered() {
+        return ResponseEntity.badRequest().body("email_already_registered");
+    }
+
+    @ExceptionHandler(InvalidCodeException.class)
+    public ResponseEntity invalidCode() {
+        return ResponseEntity.status(405).body("invalid_code");
+    }
+
+    @ExceptionHandler(ExpiredCodeException.class)
+    public ResponseEntity expiredCode() {
+        return ResponseEntity.status(405).body("code_is_expired");
+    }
+
 }
