@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tech.wellyngton.portfolio_api.infra.exception.EmailAlreadyRegisteredException;
 import tech.wellyngton.portfolio_api.infra.exception.EmailNotConfirmedExeption;
 
 @Service
@@ -38,7 +39,19 @@ public class UserService {
         }
     }
 
-    public boolean isEmailAlreadyRegistered(String login) {
-        return getUserByLogin(login) != null;
+    public boolean isEmailNotRegistered(String login) throws EmailAlreadyRegisteredException {
+        var doNotExists = false;
+        try {
+            var user = getUserByLogin(login);
+            doNotExists = user == null;
+        } catch (EntityNotFoundException ex) {
+            doNotExists = true;
+        }
+
+        if(!doNotExists) {
+            throw new EmailAlreadyRegisteredException();
+        }
+
+        return true;
     }
 }
