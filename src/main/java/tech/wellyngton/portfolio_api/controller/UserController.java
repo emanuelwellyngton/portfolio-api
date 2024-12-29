@@ -48,7 +48,8 @@ public class UserController {
     @PreAuthorize("@userService.isEmailNotRegistered(#dto.login())")
     public ResponseEntity registration(@RequestBody @Valid UserDTO dto) {
         UserEntity user = userService.registerUser(dto);
-        verificationCodeService.codeRegister(user);
+        var code = verificationCodeService.codeRegister(user);
+        emailService.sendVerificationCodeEmail(user.getLogin(), code.getCode());
         return ResponseEntity.noContent().build();
     }
 }
