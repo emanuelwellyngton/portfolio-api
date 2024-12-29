@@ -16,8 +16,7 @@ public class UserService {
     private PasswordEncoder encoder;
 
     public UserEntity registerUser(UserDTO dto) {
-        UserEntity newUser = new UserEntity(dto.login(), encoder.encode(dto.password()), dto.fristName(),
-                dto.lastName());
+        UserEntity newUser = new UserEntity(dto.login(), encoder.encode(dto.password()));
         return repository.save(newUser);
     }
 

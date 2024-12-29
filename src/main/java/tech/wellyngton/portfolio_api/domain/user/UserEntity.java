@@ -26,18 +26,12 @@ public class UserEntity implements UserDetails {
     @Setter
     private String password;
     @Setter
-    private String firstName;
-    @Setter
-    private String lastName;
-    @Setter
     private boolean confirmed;
     private LocalDateTime signUpAt;
 
-    public UserEntity(String login, String password, String firstName, String lastName) {
+    public UserEntity(String login, String password) {
         this.login = login;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.signUpAt = LocalDateTime.now();
     }
 

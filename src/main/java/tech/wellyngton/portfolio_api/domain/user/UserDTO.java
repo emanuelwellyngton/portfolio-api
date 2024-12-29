@@ -13,12 +13,6 @@ public record UserDTO(
 
         @NotNull
         @Length(min = 8, message = "password_min")
-        String password,
-
-        @NotNull
-        String fristName,
-
-        @NotNull
-        String lastName
+        String password
         ) {
 }
