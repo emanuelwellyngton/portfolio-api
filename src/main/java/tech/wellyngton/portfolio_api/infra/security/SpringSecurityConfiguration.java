@@ -31,7 +31,9 @@ public class SpringSecurityConfiguration {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/registration").permitAll();
-                    req.requestMatchers(HttpMethod.POST, "/verification-code/*").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/verification-code").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/verification-code/new").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/profile").permitAll();
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
