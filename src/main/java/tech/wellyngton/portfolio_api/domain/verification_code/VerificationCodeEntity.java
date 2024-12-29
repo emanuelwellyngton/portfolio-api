@@ -25,7 +25,7 @@ public class VerificationCodeEntity {
     private String code;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "user")
     private UserEntity user;
 
     private LocalDateTime expiresAt;
