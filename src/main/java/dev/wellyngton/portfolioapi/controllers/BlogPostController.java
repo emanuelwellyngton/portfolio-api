@@ -2,6 +2,7 @@ package dev.wellyngton.portfolioapi.controllers;
 
 import dev.wellyngton.portfolioapi.models.BlogPost;
 import dev.wellyngton.portfolioapi.services.BlogPostService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +26,11 @@ public class BlogPostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BlogPost> getPostById(@PathVariable Long id) {
-        return blogPostService.getPostById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            return ResponseEntity.ok(blogPostService.getPostById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -39,7 +42,7 @@ public class BlogPostController {
     public ResponseEntity<BlogPost> updatePost(@PathVariable Long id, @Valid @RequestBody BlogPost postDetails) {
         try {
             return ResponseEntity.ok(blogPostService.updatePost(id, postDetails));
-        } catch (RuntimeException e) {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -49,7 +52,7 @@ public class BlogPostController {
         try {
             blogPostService.deletePost(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
